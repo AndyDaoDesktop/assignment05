@@ -226,24 +226,13 @@ public class SortUtil {
 	 * @return an ArrayList of integers 1 to size of random order.
 	 */
 	public static ArrayList<Integer> generateAverageCase(int size) {
-		Integer[] arr = new Integer[size]; // Creates an int array of the given size
-		int j = 0;
-		// Numbers 1 through the size will be added in the array in ascending order
-		for(int i = 1; i <= size; i++){ 
-			arr[j] = i; 
-			j++;
+		ArrayList<Integer> arrayListAverage = new ArrayList<Integer>();
+		// Just add integers 1 to size in ascending order.
+		for(int i = 1; i <= size; i++){
+			arrayListAverage.add(i);
 		}
-		Collections.shuffle(Arrays.asList(arr)); // shuffle the array
-		ArrayList<Integer> arrayListRandom = new ArrayList<Integer>(Arrays.asList(arr)); // convert the array into an ArrayList
-		
-//		randomNum = new Random();
-//		
-//		for(int i = 1; i <= size; i++){
-//			arrayListRandom.add(size);
-//		}
-		
-		
-		return arrayListRandom;
+		Collections.shuffle(arrayListAverage); // Call shuffle on the ArrayList to mix up the integers that are sorted.
+		return arrayListAverage;
 	}
 
 	/**
