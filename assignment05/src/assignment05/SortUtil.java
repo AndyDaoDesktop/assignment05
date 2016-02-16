@@ -198,8 +198,11 @@ public class SortUtil {
 	 */
 	public static <T> void quicksort(ArrayList<T> arrayQuick, Comparator<? super T> comparator) {
 
+		
+		
+		
+		
 	}
-
 
 	/**
 	 * This method generates and returns an ArrayList of integers 1 to size in
@@ -212,7 +215,6 @@ public class SortUtil {
 		
 		for(int i = 1; i <= size; i++){
 			arrayListBest.add(i);
-			i++;
 		}
 		return arrayListBest;
 	}

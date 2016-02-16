@@ -17,8 +17,6 @@ import org.junit.Test;
  * @author Andy Dao
  */
 public class SortUtilTests {
-
-	
 	SortUtilComparator<Integer> compInteger;
 	SortUtilComparator<Character> compCharacter;
 	
@@ -28,14 +26,35 @@ public class SortUtilTests {
 	ArrayList<Integer> expectedValuesArrayList;
 	ArrayList<Character> expectedCharArrayList;
 	
+	ArrayList<Integer> expectedBestCaseList;
+	Integer[] expectedBestCaseArray;
 	
+	Integer[] expectedWorstCaseArray;
+	ArrayList<Integer> expectedWorstCaseList;
+	
+	Integer[] sortedArrayListOfSizeTen; // this sorted array (ascending order) will be used in the generate___CaseTest methods
+	ArrayList sortedArrayOfSizeTen; // the sorted ArrayList using the Integer array above
 	/**
 	 * Initiate objects in this setup method / setup test fixtures
 	 */
 	@Before
 	public void setUp() throws Exception {
+		// 2 Comparator objects, 1 for Integers, 1 for Characters
 		compInteger = new SortUtilComparator<>();
 		compCharacter = new SortUtilComparator<>();
+		
+		// BestCaseExpected
+		expectedBestCaseArray = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+		expectedBestCaseList = new ArrayList<>(Arrays.asList(expectedBestCaseArray));
+		
+		// WorstCaseExpected
+		expectedWorstCaseArray = new Integer[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+		expectedWorstCaseList = new ArrayList<>(Arrays.asList(expectedWorstCaseArray));
+		
+		// Sorted ArrayList
+		sortedArrayListOfSizeTen = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+		sortedArrayOfSizeTen = new ArrayList<>(Arrays.asList(sortedArrayListOfSizeTen));
+		
 		
 		// Add integer values to an ArrayList in non-sorted order
 		integerArrayList = new ArrayList<Integer>();
@@ -70,41 +89,82 @@ public class SortUtilTests {
 		expectedCharArrayList.add('E');
 	}
 
+	/**
+	 * This section will test mergeSort with Integers and Characters.
+	 */
 	@Test
-	public void mergeSort_Test1() {
+	public void mergeSort_WithIntegerArray() {
 		SortUtil.mergesort(integerArrayList, compInteger);
 		Assert.assertEquals(expectedValuesArrayList, integerArrayList);
 	}
 	
 	@Test
-	public void mergeSort_Test2() {
+	public void mergeSort_WithChararacterArray() {
 		SortUtil.mergesort(charArrayList, compCharacter);
 		Assert.assertEquals(expectedCharArrayList, charArrayList);
 	}
 	
+	/**
+	 * This section will test quickSort with Integers and Characters.
+	 */
 	@Test
-	public void quickSort_Test1() {
-		
+	public void quickSort_WithIntegerArray() {
+		SortUtil.quicksort(integerArrayList, compInteger);
+		Assert.assertEquals(expectedValuesArrayList, integerArrayList);
 	}
 	
 	@Test
-	public void insertion_Sort() {
-		
+	public void quickSort_WithCharacterArray() {
+		SortUtil.quicksort(charArrayList, compCharacter);
+		Assert.assertEquals(expectedValuesArrayList, charArrayList);
+	}
+	
+	/**
+	 * These next tests will use merge sort on the 3 types of generated methods from Integers 1-10:
+	 * BestCase generation
+	 * AverageCase generation
+	 * WorstCase generation
+	 * 
+	 * They will be compared to a already sorted Integer ArrayList of size 10 (ascending order).
+	 */
+	@Test
+	public void mergeSort_BestCaseTest(){
+		ArrayList<Integer> bestCaseTestArray = SortUtil.generateBestCase(10); // creates an ArrayList of size 10, will generate best case of Integers 1 - 10
+		SortUtil.mergesort(bestCaseTestArray, compInteger); // use mergesort on that ArrayList
+		Assert.assertEquals(sortedArrayOfSizeTen, bestCaseTestArray);
 	}
 	
 	@Test
-	public void generate_BestCase_Test1() {
-		
+	public void mergeSort_AverageCaseTest(){
+		ArrayList<Integer> averageCaseTestArray = SortUtil.generateAverageCase(10); // creates an ArrayList of size 10, will generate average case of Integers 1 - 10
+		SortUtil.mergesort(averageCaseTestArray, compInteger); // use mergesort on that ArrayList
+		Assert.assertEquals(sortedArrayOfSizeTen, averageCaseTestArray);
 	}
 	
 	@Test
-	public void generate_AverageCase_Test1() {
-		System.out.println(SortUtil.generateAverageCase(15).toString());
+	public void mergeSort_WorstCaseTest() {
+		ArrayList<Integer> worstCaseTestArray = SortUtil.generateAverageCase(10); // creates an ArrayList of size 10, will generate worst case of Integers 1 - 10
+		SortUtil.mergesort(worstCaseTestArray, compInteger); // use mergesort on that ArrayList
+		Assert.assertEquals(sortedArrayOfSizeTen, worstCaseTestArray);
+	}
+	
+	/**
+	 * This section of tests will be to prove that the ArrayLists will generate their type of case correctly.
+	 */
+	@Test
+	public void generate_BestCase_Test() { // Will generate an Integer ArrayList: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+		Assert.assertEquals(expectedBestCaseList, SortUtil.generateBestCase(10));
 	}
 	
 	@Test
-	public void generate_WorstCase_Test1() {
-		//System.out.println(SortUtil.generateWorstCase(50).toString());
+	public void generate_AverageCase_Test() { // Will generate an Integer ArrayList: numbers 1-15, in random order.
+		SortUtil.generateAverageCase(15);
+		// Not too sure on how we will test a random order (we might not need this test)
+	}
+	
+	@Test
+	public void generate_WorstCase_Test() { // Will generate an Integer ArrayList: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+		Assert.assertEquals(expectedWorstCaseList, SortUtil.generateWorstCase(10));
 	}
 	
 	/**
