@@ -9,7 +9,8 @@ import java.util.Comparator;
 import java.util.Random;
 
 /**
- * [The Problem] We have been asked to provide a robust and efficient routine
+ * [The Problem] 
+ * We have been asked to provide a robust and efficient routine
  * for sorting Java ArrayLists. Of course, to ensure that our sort routine will
  * be capable of accepting ArrayLists containing objects of any type, the method
  * must be generic.
@@ -24,21 +25,16 @@ import java.util.Random;
  * @AverageCase: The ArrayList contains objects in a permuted order.
  * @WorstCase: The ArrayList contains objects in reverse-sorted order.
  * 
- *             [Implementation Guidelines] Avoid any costly O(N) ArrayList
- *             operations, such as: IndexOf, remove, contains, addAll For
- *             mergesort, pre-allocate a temporary list for merge space once in
- *             the driver method. Avoid allocating and creating enough size for
- *             it during every recursive call. Mergesort should never have
- *             quadratic performance, unless the insertion sort threshold is
- *             very large. When the insertion sort threshold is reached during
- *             mergesort, make sure you only insertion-sort the relevant portion
- *             of the list. Your insertion sort method will have to be modified
- *             to only work on a certain range (i.e., take a left and right
- *             index, and only sort between those indices), instead of sorting
- *             the entire array.
+ * [Implementation Guidelines] 
+ * Avoid any costly O(N) ArrayList operations, such as: IndexOf, remove, contains, addAll For mergesort, pre-allocate 
+ * a temporary list for merge space once in	the driver method. Avoid allocating and creating enough 
+ * size for it during every recursive call. Mergesort should never have quadratic performance, 
+ * unless the insertion sort threshold is very large. When the insertion sort threshold is reached during mergesort, 
+ * make sure you only insertion-sort the relevant portion  of the list. Your insertion sort method will have to be modified
+ * to only work on a certain range (i.e., take a left and right index, and only sort between those indices), instead of sorting 
+ * the entire array.
  * 
- *             Quicksort should never have quadratic performance with a decent
- *             pivot selection, such as picking a random index.
+ * Quicksort should never have quadratic performance with a decent pivot selection, such as picking a random index.
  *             
  * @author Andy Dao
  */
@@ -47,7 +43,6 @@ public class SortUtil {
 	SortUtilComparator<Integer> compInteger = new SortUtilComparator<>();
 	SortUtilComparator<Character> compCharacter = new SortUtilComparator<>();
 
-	private static Random randomNum;
 	private static int threshhold; 	// threshold on when to switch to insertionSort in mergeSort.
 	
 	public SortUtil() {
@@ -112,7 +107,7 @@ public class SortUtil {
 	 * @param start - the first index of the range to sort
 	 * @param mid - the first index of the range to sort
 	 * @param end - last index of the array range to sort
-	 * @param comparator - comparator to compare the elements
+	 * @param comparator - generic comparator to compare the elements
 	 */
 	public static <T> void merge(ArrayList<T> arrayValues, ArrayList<T> tempArrayList, int start, int mid, int end, Comparator<? super T> comparator ){
 		// Next element to consider in the first half of arrayValues<T>
@@ -159,19 +154,19 @@ public class SortUtil {
 	 * This generic method sorts the input array using an insertion sort and the
 	 * input Comparator object.
 	 */
-	public static <T> void insertionSort(ArrayList<T> array, int left, int right, Comparator<? super T> comparatorObj) {
+	public static <T> void insertionSort(ArrayList<T> arrayToSort, int left, int right, Comparator<? super T> comparatorObj) {
 		int i, j;
 		T index;
 		for(i = 1; i < left; i++){
 			j = i;
-			index = array.get(i); // <-- item to be inserted
+			index = arrayToSort.get(i); // <-- item to be inserted
 			
 			// This part will shift the items until the insertion position is found
-			while(j > 0 && comparatorObj.compare(array.get(j - 1), index) > 0){
-				array.set(j, array.get(j - 1));
+			while(j > 0 && comparatorObj.compare(arrayToSort.get(j - 1), index) > 0){
+				arrayToSort.set(j, arrayToSort.get(j - 1));
 				j--;
 			}
-			array.set(j, index); // insert value of index into index j
+			arrayToSort.set(j, index); // insert value of index into index j
 		}
 	}
 	
@@ -195,12 +190,23 @@ public class SortUtil {
 	 * the items greater than the pivot are to the right. 3: take the left half
 	 * and go back to step 1 4: take the right half and go back to step 1
 	 * 
+	 * This is the header method
 	 */
-	public static <T> void quicksort(ArrayList<T> arrayQuick, Comparator<? super T> comparator) {
-
+	public static <T> void quicksort(ArrayList<T> arrayToSort, Comparator<? super T> comp) {
 		
 		
 		
+	}
+	
+	/**
+	 * quicksort recursive method 
+	 * 
+	 * @param arrayToSort - the array to sort
+	 * @param left - left side of array
+	 * @param right - right side of array (the end)
+	 * @param comp - generic comparator to compare the elements
+	 */
+	public static <T> void quickSortRecursive(ArrayList<T> arrayToSort, int left, int right, Comparator<? super T> comp){
 		
 	}
 
