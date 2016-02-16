@@ -40,9 +40,9 @@ import java.util.Random;
  */
 public class SortUtil {
 	// Add any instance variables here //
-	SortUtilComparator<Integer> compInteger = new SortUtilComparator<>();
-	SortUtilComparator<Character> compCharacter = new SortUtilComparator<>();
-
+//	SortUtilComparator<Integer> compInteger = new SortUtilComparator<>();
+//	SortUtilComparator<Character> compCharacter = new SortUtilComparator<>();
+	
 	private static int threshhold; 	// threshold on when to switch to insertionSort in mergeSort.
 	
 	public SortUtil() {
@@ -70,9 +70,9 @@ public class SortUtil {
 	 * @param comparator - comparator to compare the elements
 	 */
 	public static <T> void mergesort(ArrayList<T> arrayMerge, Comparator<? super T> comparator) {
-		ArrayList<T> tempArray = new ArrayList<T>();
+		ArrayList<T> tempArrayList = new ArrayList<T>();
 		threshhold = 2;
-		mergesortRecursive(arrayMerge, tempArray, 0, arrayMerge.size()-1, comparator);
+		mergesortRecursive(arrayMerge, tempArrayList, 0, arrayMerge.size()-1, comparator);
 	}
 	
 	/**
@@ -180,22 +180,23 @@ public class SortUtil {
 	 * 
 	 * Your quicksort implementation should be able to easily switch among these
 	 * strategies. (Consider using a few private helper methods for your
-	 * different pivot selection strategies.) You will perform experiments to
-	 * determine which pivot strategy works best (see the Analysis Document).
-	 * Your quicksort may also switch to insertion sort on some small threshold
-	 * if you wish.
+	 * different pivot selection strategies.) 
+	 * You will perform experiments to determine which pivot strategy works best (see the Analysis Document).
+	 * Your quicksort may also switch to insertion sort on some small threshold if you wish.
 	 * 
-	 * 1: select an item in the array to be the pivot 2: partition the array so
-	 * that all items less than the pivot are to the left of the pivot, and all
-	 * the items greater than the pivot are to the right. 3: take the left half
-	 * and go back to step 1 4: take the right half and go back to step 1
+	 * 1: select an item in the array to be the pivot 
+	 * 2: partition the array so that all items less than the pivot are to the left of the pivot, and all
+	 * the items greater than the pivot are to the right. 
+	 * 3: take the left half and go back to step 1 
+	 * 4: take the right half and go back to step 1
 	 * 
 	 * This is the header method
 	 */
 	public static <T> void quicksort(ArrayList<T> arrayToSort, Comparator<? super T> comp) {
-		
-		
-		
+		int sizeOfArray = arrayToSort.size()-1;
+		System.out.println(arrayToSort.toString() + "\n	");
+		quickSortRecursive(arrayToSort, 0, sizeOfArray, comp);
+		System.out.println(arrayToSort.toString());
 	}
 	
 	/**
@@ -207,7 +208,64 @@ public class SortUtil {
 	 * @param comp - generic comparator to compare the elements
 	 */
 	public static <T> void quickSortRecursive(ArrayList<T> arrayToSort, int left, int right, Comparator<? super T> comp){
+		if(right - left <= 0){
+			return; // End. Everything is sorted.
+		}
+		else{
+			
+			T pivot = arrayToSort.get(right); // the value of the very end element to compare with
+				System.out.println("Value in right is: " + pivot + " is made the pivot.");
+			
+				System.out.println("\nleft= " + left + " right= " + right + " pivot= " + pivot + " sent to be partitioned");
+			int pivotLocation = partitionArrays(arrayToSort, left, right, pivot, comp);
+			
+			System.out.println("Value in left " + arrayToSort.get(left) + " is made the pivot");
+			
+			quickSortRecursive(arrayToSort, left, pivotLocation-1,  comp);
+			quickSortRecursive(arrayToSort, pivotLocation+1, right, comp);
+		}
+	}
+
+	/**
+	 * This takes in a pivot point and partitions array with that value.
+	 * @param pivot
+	 */
+	public static <T> int partitionArrays(ArrayList<T> arrayToSort, int left, int right, T pivot, Comparator<? super T> comp) {
+		int leftSide = left - 1;
+		int rightSide = right;
 		
+		while(true){
+			while(comp.compare(arrayToSort.get(++leftSide), arrayToSort.get(arrayToSort.indexOf(pivot))) < 0);
+			
+			System.out.println(arrayToSort.get(leftSide) + " in index " + leftSide + " is bigger than the pivot value " + pivot);
+			
+			while(rightSide > 0 && comp.compare(arrayToSort.get(--rightSide), arrayToSort.get(arrayToSort.indexOf(pivot))) > 0);
+			
+			System.out.println(arrayToSort.get(rightSide) + " in index " + rightSide + " is smaller than the pivot value " + pivot);
+
+			if(leftSide >= rightSide){
+				System.out.println("left is >= rightside, time to break out");
+				break;
+			}
+			else
+			{
+				swapValues(arrayToSort, leftSide, rightSide);
+				System.out.println(arrayToSort.get(leftSide) + " was swapped for " + arrayToSort.get(rightSide) + "\n");
+			}
+		}
+	swapValues(arrayToSort, leftSide, right-1);
+	return leftSide;
+}
+	
+	/**
+	 * Will swap 2 values with each other
+	 * @param value1 - the left value
+	 * @param value2 - the right value
+	 */
+	public static <T> void swapValues(ArrayList<T> arrayToSort, int index1, int index2){
+		T tempArraySwap2 = arrayToSort.get(index1);// replace element of arrayToSort index1, with element of arrayToSort index2.
+		arrayToSort.set(index1, arrayToSort.get(index2));
+		arrayToSort.set(index2, tempArraySwap2);
 	}
 
 	/**
