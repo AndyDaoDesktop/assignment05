@@ -48,9 +48,7 @@ public class SortUtil {
 	SortUtilComparator<Character> compCharacter = new SortUtilComparator<>();
 
 	private static Random randomNum;
-	
-	
-	private static int threshhold = 2; // threshold on when to switch to insertionSort in mergeSort.
+	private static int threshhold; 	// threshold on when to switch to insertionSort in mergeSort.
 	
 	public SortUtil() {
 
@@ -78,6 +76,7 @@ public class SortUtil {
 	 */
 	public static <T> void mergesort(ArrayList<T> arrayMerge, Comparator<? super T> comparator) {
 		ArrayList<T> tempArray = new ArrayList<T>();
+		threshhold = 2;
 		mergesortRecursive(arrayMerge, tempArray, 0, arrayMerge.size()-1, comparator);
 	}
 	
