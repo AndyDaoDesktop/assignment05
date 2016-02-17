@@ -1,12 +1,7 @@
 package assignment05;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,6 +9,8 @@ import org.junit.Test;
 
 
 /**
+ * Test Cases for SortUtil
+ * 
  * @author Andy Dao
  */
 public class SortUtilTests {
@@ -35,7 +32,7 @@ public class SortUtilTests {
 	ArrayList<Integer> expectedWorstCaseList;
 	
 	Integer[] sortedArrayListOfSizeTen; // this sorted array (ascending order) will be used in the generate___CaseTest methods
-	ArrayList sortedArrayOfSizeTen; // the sorted ArrayList using the Integer array above
+	ArrayList<Integer> sortedArrayOfSizeTen; // the sorted ArrayList using the Integer array above
 	
 	String[] expectedStringArray;
 	ArrayList<String> expectedStringArrayList;
@@ -213,5 +210,6 @@ public class SortUtilTests {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		
 	}
 }

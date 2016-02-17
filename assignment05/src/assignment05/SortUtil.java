@@ -1,25 +1,14 @@
 package assignment05;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Random;
 
 /**
- * [The Problem] 
  * We have been asked to provide a robust and efficient routine
  * for sorting Java ArrayLists. Of course, to ensure that our sort routine will
  * be capable of accepting ArrayLists containing objects of any type, the method
  * must be generic.
- * 
- * With so many sorting algorithms to choose from, we are not sure which
- * algorithm will perform the best for any kind of list. We have narrowed our
- * choices down to mergesort and quicksort. We will perform experiments to see
- * which of these two sorting algorithms has the fastest running times for Java
- * ArrayLists of various sizes in the following three categories.
  * 
  * @BestCase: The ArrayList contains objects in sorted order.
  * @AverageCase: The ArrayList contains objects in a permuted order.
@@ -34,20 +23,13 @@ import java.util.Random;
  * to only work on a certain range (i.e., take a left and right index, and only sort between those indices), instead of sorting 
  * the entire array.
  * 
- * Quicksort should never have quadratic performance with a decent pivot selection, such as picking a random index.
- *             
  * @author Andy Dao
  */
 public class SortUtil {
 	// Add any instance variables here //
-//	SortUtilComparator<Integer> compInteger = new SortUtilComparator<>();
-//	SortUtilComparator<Character> compCharacter = new SortUtilComparator<>();
-	
 	private static int threshhold; 	// threshold on when to switch to insertionSort in mergeSort.
 	
 	public SortUtil() {
-
-		
 	}
 
 	/**
@@ -60,9 +42,6 @@ public class SortUtil {
 	 * Make this threshold value a private static variable that you can easily
 	 * change. You will perform experiments to determine which threshold value
 	 * works best (see the Analysis Document).
-	 * 
-	 * [Don't forget to include the insertion sort in the program files you
-	 * submit.]
 	 * 
 	 * This is the header method for mergesort
 	 * 
@@ -194,9 +173,7 @@ public class SortUtil {
 	 */
 	public static <T> void quicksort(ArrayList<T> arrayToSort, Comparator<? super T> comp) {
 		int sizeOfArray = arrayToSort.size()-1;
-		System.out.println(arrayToSort.toString() + "\n	");
 		quickSortRecursive(arrayToSort, 0, sizeOfArray, comp);
-		System.out.println(arrayToSort.toString());
 	}
 	
 	/**
@@ -212,14 +189,9 @@ public class SortUtil {
 			return; // End. Everything is sorted.
 		}
 		else{
-			
 			T pivot = arrayToSort.get(right); // the value of the very end element to compare with
-				System.out.println("Value in right is: " + pivot + " is made the pivot.");
 			
-				System.out.println("\nleft= " + left + " right= " + right + " pivot= " + pivot + " sent to be partitioned");
 			int pivotLocation = partitionArrays(arrayToSort, left, right, pivot, comp);
-			
-			System.out.println("Value in left " + arrayToSort.get(left) + " is made the pivot");
 			
 			quickSortRecursive(arrayToSort, left, pivotLocation-1,  comp);
 			quickSortRecursive(arrayToSort, pivotLocation+1, right, comp);
@@ -237,20 +209,14 @@ public class SortUtil {
 		while(true){
 			while(comp.compare(arrayToSort.get(++leftSide), arrayToSort.get(arrayToSort.indexOf(pivot))) < 0);
 			
-			System.out.println(arrayToSort.get(leftSide) + " in index " + leftSide + " is bigger than the pivot value " + pivot);
-			
 			while(rightSide > 0 && comp.compare(arrayToSort.get(--rightSide), arrayToSort.get(arrayToSort.indexOf(pivot))) > 0);
 			
-			System.out.println(arrayToSort.get(rightSide) + " in index " + rightSide + " is smaller than the pivot value " + pivot);
-
 			if(leftSide >= rightSide){
-				System.out.println("left is >= rightside, time to break out");
 				break;
 			}
 			else
 			{
 				swapValues(arrayToSort, leftSide, rightSide);
-				System.out.println(arrayToSort.get(leftSide) + " was swapped for " + arrayToSort.get(rightSide) + "\n");
 			}
 		}
 	swapValues(arrayToSort, leftSide, right);
@@ -276,7 +242,7 @@ public class SortUtil {
 	 */
 	public static ArrayList<Integer> generateBestCase(int size) {
 		ArrayList<Integer> arrayListBest = new ArrayList<Integer>();
-		
+		// Add integers 1 to size in ascending order.
 		for(int i = 1; i <= size; i++){
 			arrayListBest.add(i);
 		}
@@ -291,7 +257,7 @@ public class SortUtil {
 	 */
 	public static ArrayList<Integer> generateAverageCase(int size) {
 		ArrayList<Integer> arrayListAverage = new ArrayList<Integer>();
-		// Just add integers 1 to size in ascending order.
+		// Add integers 1 to size in ascending order.
 		for(int i = 1; i <= size; i++){
 			arrayListAverage.add(i);
 		}
@@ -307,7 +273,7 @@ public class SortUtil {
 	 */
 	public static ArrayList<Integer> generateWorstCase(int size) {
 		ArrayList<Integer> arrayListWorst = new ArrayList<Integer>();
-		
+		// Add integers 1 to size in descending order.
 		for(int i = 1; size >= i; size--){
 			arrayListWorst.add(size);
 		}
