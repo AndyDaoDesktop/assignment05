@@ -253,7 +253,7 @@ public class SortUtil {
 				System.out.println(arrayToSort.get(leftSide) + " was swapped for " + arrayToSort.get(rightSide) + "\n");
 			}
 		}
-	swapValues(arrayToSort, leftSide, right-1);
+	swapValues(arrayToSort, leftSide, right);
 	return leftSide;
 }
 	
