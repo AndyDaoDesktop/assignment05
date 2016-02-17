@@ -17,11 +17,13 @@ import org.junit.Test;
  * @author Andy Dao
  */
 public class SortUtilTests {
-	SortUtilComparator<Integer> compInteger;
-	SortUtilComparator<Character> compCharacter;
+	SortUtilComparator<Integer> compInteger; // Comparator obj for Integers
+	SortUtilComparator<Character> compCharacter; // Comparator obj for Characters
+	SortUtilComparator<String> compString; // Comparator obj for Strings
 	
-	ArrayList<Integer> integerArrayList;
-	ArrayList<Character> charArrayList;
+	ArrayList<Integer> integerArrayListToSort;
+	ArrayList<Character> charArrayListToSort;
+	ArrayList<String> stringArrayListToSort;
 	
 	ArrayList<Integer> expectedValuesArrayList;
 	ArrayList<Character> expectedCharArrayList;
@@ -34,42 +36,48 @@ public class SortUtilTests {
 	
 	Integer[] sortedArrayListOfSizeTen; // this sorted array (ascending order) will be used in the generate___CaseTest methods
 	ArrayList sortedArrayOfSizeTen; // the sorted ArrayList using the Integer array above
+	
+	String[] expectedStringArray;
+	ArrayList<String> expectedStringArrayList;
+
+	
+	
+	
 	/**
 	 * Initiate objects in this setup method / setup test fixtures
 	 */
 	@Before
 	public void setUp() throws Exception {
-		// 2 Comparator objects, 1 for Integers, 1 for Characters
+		// 3 Comparator objects, 1 for Integers, 1 for Characters, 1 for Strings
 		compInteger = new SortUtilComparator<>();
 		compCharacter = new SortUtilComparator<>();
+		compString = new SortUtilComparator<>();
 		
-		// BestCaseExpected
+// BestCaseExpected
 		expectedBestCaseArray = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 		expectedBestCaseList = new ArrayList<>(Arrays.asList(expectedBestCaseArray));
 		
-		// WorstCaseExpected
+// WorstCaseExpected
 		expectedWorstCaseArray = new Integer[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 		expectedWorstCaseList = new ArrayList<>(Arrays.asList(expectedWorstCaseArray));
 		
-		// Sorted ArrayList
+// Sorted ArrayList
 		sortedArrayListOfSizeTen = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 		sortedArrayOfSizeTen = new ArrayList<>(Arrays.asList(sortedArrayListOfSizeTen));
 		
 		
-		// Add integer values to an ArrayList in non-sorted order
-		integerArrayList = new ArrayList<Integer>();
-		integerArrayList.add(51);
-		integerArrayList.add(43);
-		integerArrayList.add(45);
-		integerArrayList.add(19);
-		integerArrayList.add(39);
-		integerArrayList.add(40);
-		integerArrayList.add(20);
-		integerArrayList.add(46);
-		integerArrayList.add(18);
-		integerArrayList.add(40);
-
-
+// Add integer values to an ArrayList in non-sorted order
+		integerArrayListToSort = new ArrayList<Integer>();
+		integerArrayListToSort.add(51);
+		integerArrayListToSort.add(43);
+		integerArrayListToSort.add(45);
+		integerArrayListToSort.add(19);
+		integerArrayListToSort.add(39);
+		integerArrayListToSort.add(40);
+		integerArrayListToSort.add(20);
+		integerArrayListToSort.add(46);
+		integerArrayListToSort.add(18);
+		integerArrayListToSort.add(40);
 		// Expected integer ArrayList order
 		expectedValuesArrayList = new ArrayList<Integer>();
 		expectedValuesArrayList.add(18);
@@ -83,15 +91,13 @@ public class SortUtilTests {
 		expectedValuesArrayList.add(46);
 		expectedValuesArrayList.add(51);
 
-
-		// Add char values to an ArrayList in non-sorted order
-		charArrayList = new ArrayList<Character>();
-		charArrayList.add('A');
-		charArrayList.add('D');
-		charArrayList.add('B');
-		charArrayList.add('C');
-		charArrayList.add('E');
-		
+// Add char values to an ArrayList in non-sorted order
+		charArrayListToSort = new ArrayList<Character>();
+		charArrayListToSort.add('A');
+		charArrayListToSort.add('D');
+		charArrayListToSort.add('B');
+		charArrayListToSort.add('C');
+		charArrayListToSort.add('E');
 		// Expected char ArrayList order
 		expectedCharArrayList = new ArrayList<Character>();
 		expectedCharArrayList.add('A');
@@ -99,37 +105,60 @@ public class SortUtilTests {
 		expectedCharArrayList.add('C');
 		expectedCharArrayList.add('D');
 		expectedCharArrayList.add('E');
+		
+// Sort this String ArrayList
+		stringArrayListToSort = new ArrayList<String>();
+		stringArrayListToSort.add("DEF");
+		stringArrayListToSort.add("GHI");
+		stringArrayListToSort.add("ABC");
+		stringArrayListToSort.add("JKL");
+		// Sorted String array
+		expectedStringArray = new String[]{"ABC", "DEF", "GHI", "JKL"};
+		expectedStringArrayList = new ArrayList<>(Arrays.asList(expectedStringArray));
+		
 	}
 
 	/**
-	 * This section will test mergeSort with Integers and Characters.
+	 * This section will test mergeSort with Integers, Characters, and Strings.
 	 */
 	@Test
 	public void mergeSort_WithIntegerArray() {
-		SortUtil.mergesort(integerArrayList, compInteger);
-		Assert.assertEquals(expectedValuesArrayList, integerArrayList);
+		SortUtil.mergesort(integerArrayListToSort, compInteger);
+		Assert.assertEquals(expectedValuesArrayList, integerArrayListToSort);
 	}
 	
 	@Test
 	public void mergeSort_WithChararacterArray() {
-		SortUtil.mergesort(charArrayList, compCharacter);
-		Assert.assertEquals(expectedCharArrayList, charArrayList);
+		SortUtil.mergesort(charArrayListToSort, compCharacter);
+		Assert.assertEquals(expectedCharArrayList, charArrayListToSort);
+	}
+	
+	@Test
+	public void mergeSort_WithStringArray() {
+		SortUtil.mergesort(stringArrayListToSort, compString);
+		Assert.assertEquals(expectedStringArrayList, stringArrayListToSort);		
 	}
 	
 	/**
-	 * This section will test quickSort with Integers and Characters.
+	 * This section will test quickSort with Integers, Characters, and Strings.
 	 */
 	@Test
 	public void quickSort_WithIntegerArray() {
-		SortUtil.quicksort(integerArrayList, compInteger);
-		Assert.assertEquals(expectedValuesArrayList, integerArrayList);
+		SortUtil.quicksort(integerArrayListToSort, compInteger);
+		Assert.assertEquals(expectedValuesArrayList, integerArrayListToSort);
 	}
 	
-//	@Test
-//	public void quickSort_WithCharacterArray() {
-//		SortUtil.quicksort(charArrayList, compCharacter);
-//		Assert.assertEquals(expectedValuesArrayList, charArrayList);
-//	}
+	@Test
+	public void quickSort_WithCharacterArray() {
+		SortUtil.quicksort(charArrayListToSort, compCharacter);
+		Assert.assertEquals(expectedCharArrayList, charArrayListToSort);
+	}
+	
+	@Test
+	public void quickSort_WithStringArray() {
+		SortUtil.quicksort(stringArrayListToSort, compString);
+		Assert.assertEquals(expectedStringArrayList, stringArrayListToSort);
+	}
 	
 	/**
 	 * These next tests will use merge sort on the 3 types of generated methods from Integers 1-10:
