@@ -11,33 +11,32 @@ import org.junit.Test;
 /**
  * Test Cases for SortUtil
  * 
- * @author Andy Dao
+ * @author Andy Dao and Jonathan Boyle
  */
 public class SortUtilTests {
 	SortUtilComparator<Integer> compInteger; // Comparator obj for Integers
 	SortUtilComparator<Character> compCharacter; // Comparator obj for Characters
 	SortUtilComparator<String> compString; // Comparator obj for Strings
 	
-	ArrayList<Integer> integerArrayListToSort;
-	ArrayList<Character> charArrayListToSort;
-	ArrayList<String> stringArrayListToSort;
+	ArrayList<Integer> integerArrayListToSort; // Integer ArrayList to sort
+	ArrayList<Character> charArrayListToSort; // Character ArrayList to sort 
+	ArrayList<String> stringArrayListToSort; // String ArrayList to sort
 	
-	ArrayList<Integer> expectedValuesArrayList;
-	ArrayList<Character> expectedCharArrayList;
+	ArrayList<Integer> expectedValuesArrayList; // The expected Integer ArrayList 
+	ArrayList<Character> expectedCharArrayList; // The expected Character ArrayList
 	
-	ArrayList<Integer> expectedBestCaseList;
-	Integer[] expectedBestCaseArray;
+	Integer[] expectedBestCaseArray; // Will be used to check Best Case ordering (ascending order)
+	ArrayList<Integer> expectedBestCaseList; 
 	
-	Integer[] expectedWorstCaseArray;
+	Integer[] expectedWorstCaseArray; // Will be used to check Worst Case ordering (random order of integers 1 to size)
 	ArrayList<Integer> expectedWorstCaseList;
 	
 	Integer[] sortedArrayListOfSizeTen; // this sorted array (ascending order) will be used in the generate___CaseTest methods
 	ArrayList<Integer> sortedArrayOfSizeTen; // the sorted ArrayList using the Integer array above
 	
-	String[] expectedStringArray;
+	String[] expectedStringArray; // The expected String ArrayList
 	ArrayList<String> expectedStringArrayList;
 
-	
 	
 	
 	/**
@@ -45,7 +44,7 @@ public class SortUtilTests {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		// 3 Comparator objects, 1 for Integers, 1 for Characters, 1 for Strings
+		// Create 3 Comparator objects, 1 for Integers, 1 for Characters, 1 for Strings
 		compInteger = new SortUtilComparator<>();
 		compCharacter = new SortUtilComparator<>();
 		compString = new SortUtilComparator<>();

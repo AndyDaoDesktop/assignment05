@@ -23,7 +23,7 @@ import java.util.Comparator;
  * to only work on a certain range (i.e., take a left and right index, and only sort between those indices), instead of sorting 
  * the entire array.
  * 
- * @author Andy Dao
+ * @author Andy Dao and Jonathan Boyle
  */
 public class SortUtil {
 	// Add any instance variables here //

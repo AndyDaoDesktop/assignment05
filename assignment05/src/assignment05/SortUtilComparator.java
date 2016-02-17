@@ -3,8 +3,9 @@ package assignment05;
 import java.util.Comparator;
 
 /**
- * Lexicographical order Comparator Object for use in the getLargestAnagramGroup() that ignores case.
- * @author Andy Dao
+ * Generic Comparator object to compare 2 generic objects.
+ * 
+ * @author Andy Dao and Jonathan Boyle
  */
 public class SortUtilComparator<T extends Comparable<? super T>> implements Comparator<T> {
 	/**
