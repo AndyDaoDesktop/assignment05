@@ -3,6 +3,7 @@ package assignment05;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 
 /**
  * We have been asked to provide a robust and efficient routine
@@ -27,9 +28,22 @@ import java.util.Comparator;
  */
 public class SortUtil {
 	// Add any instance variables here //
-	private static int threshhold; 	// threshold on when to switch to insertionSort in mergeSort.
+	private static int threshold = 2; 	// threshold on when to switch to insertionSort in mergeSort.
+	private static int pivotStyle = 0;		//variable to select pivot style
 	
-	public SortUtil() {
+
+	
+	public static void setThreshold(int _threshold) {
+		threshold = _threshold;
+	}
+	public static int getThreshold() {
+		return threshold;
+	}
+	public static void setPivot(int _pivot){ 
+		pivotStyle = _pivot;
+	}
+	public static int getPivotStyle() {
+		return pivotStyle;
 	}
 
 	/**
@@ -50,7 +64,7 @@ public class SortUtil {
 	 */
 	public static <T> void mergesort(ArrayList<T> arrayMerge, Comparator<? super T> comparator) {
 		ArrayList<T> tempArrayList = new ArrayList<T>();
-		threshhold = 2;
+		setThreshold(2);
 		mergesortRecursive(arrayMerge, tempArrayList, 0, arrayMerge.size()-1, comparator);
 	}
 	
@@ -63,7 +77,7 @@ public class SortUtil {
 	 * @param comparator - comparator to compare the elements
 	 */
 	public static <T> void  mergesortRecursive(ArrayList<T> arrayMerge, ArrayList<T> tempArrayList, int left, int right, Comparator<? super T> comparator ) {
-		if(right - left <= threshhold){ // call insertion sort when size of arraylists are equal or less than the given threshold
+		if(right - left <= getThreshold()){ // call insertion sort when size of arraylists are equal or less than the given threshold
 			insertionSort(arrayMerge , left, right, comparator);
 		}
 		if(left < right && (right-left) >= 1){
@@ -136,7 +150,7 @@ public class SortUtil {
 	public static <T> void insertionSort(ArrayList<T> arrayToSort, int left, int right, Comparator<? super T> comparatorObj) {
 		int i, j;
 		T index;
-		for(i = 1; i < left; i++){
+		for(i = left; i < right; i++){
 			j = i;
 			index = arrayToSort.get(i); // <-- item to be inserted
 			
@@ -184,12 +198,13 @@ public class SortUtil {
 	 * @param right - right side of array (the end)
 	 * @param comp - generic comparator to compare the elements
 	 */
-	public static <T> void quickSortRecursive(ArrayList<T> arrayToSort, int left, int right, Comparator<? super T> comp){
+	public static <T> void quickSortRecursive(ArrayList<T> arrayToSort, int left, int right, Comparator<? super T> comp){  
 		if(right - left <= 0){
 			return; // End. Everything is sorted.
 		}
 		else{
-			T pivot = arrayToSort.get(right); // the value of the very end element to compare with
+			T pivot = pivotValue(arrayToSort, getPivotStyle(), comp); // the value of the very end element to compare with, consider hard-coding this value and changing for exerimentation
+			
 			
 			int pivotLocation = partitionArrays(arrayToSort, left, right, pivot, comp);
 			
@@ -278,5 +293,36 @@ public class SortUtil {
 			arrayListWorst.add(size);
 		}
 		return arrayListWorst;
+	}
+	
+	public static <T> T pivotValue(ArrayList<T> array, int style, Comparator<? super T> comp) throws IllegalArgumentException {
+		
+		if(style == 0) {
+			return array.get(array.size() / 2);
+		}
+		
+		else if(style == 1) {
+			ArrayList<T> teenyList = new ArrayList<T>();
+			teenyList.add(array.get(0));
+			teenyList.add(array.get(array.size()/2));
+			teenyList.add(array.get(array.size()));
+			SortUtil.insertionSort(teenyList, 0, teenyList.size()-1, comp);
+			return teenyList.get(1); //the middle value of the sorted list of components used to calculate pivot value
+		}
+		
+		else if(style == 2) {
+			Random rand = new Random();
+			
+			ArrayList<T> teenyList = new ArrayList<T>();
+			teenyList.add(array.get(rand.nextInt(array.size())));
+			teenyList.add(array.get(rand.nextInt(array.size())));
+			teenyList.add(array.get(rand.nextInt(array.size())));
+			SortUtil.insertionSort(teenyList, 0, teenyList.size()-1, comp);
+			return teenyList.get(1); //the middle value of the sorted list of components used to calculate pivot value
+		}
+		
+		else {
+			throw new IllegalArgumentException();
+		}
 	}
 }
