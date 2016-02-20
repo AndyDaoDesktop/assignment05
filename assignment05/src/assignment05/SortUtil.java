@@ -28,7 +28,7 @@ import java.util.Random;
  */
 public class SortUtil {
 	// Add any instance variables here //
-	private static int threshold = 2; 	// threshold on when to switch to insertionSort in mergeSort.
+	private static int threshold = 10; 	// threshold on when to switch to insertionSort in mergeSort.
 	private static int pivotStyle = 0;		//variable to select pivot style
 	
 
@@ -64,7 +64,7 @@ public class SortUtil {
 	 */
 	public static <T> void mergesort(ArrayList<T> arrayMerge, Comparator<? super T> comparator) {
 		ArrayList<T> tempArrayList = new ArrayList<T>();
-		setThreshold(2);
+		setThreshold(10);
 		mergesortRecursive(arrayMerge, tempArrayList, 0, arrayMerge.size()-1, comparator);
 	}
 	
@@ -150,13 +150,14 @@ public class SortUtil {
 	public static <T> void insertionSort(ArrayList<T> arrayToSort, int left, int right, Comparator<? super T> comparatorObj) {
 		int i, j;
 		T index;
-		for(i = left; i < right; i++){
+		for(i = left+1; i <= right; i++){ //>=
 			j = i;
 			index = arrayToSort.get(i); // <-- item to be inserted
 			
 			// This part will shift the items until the insertion position is found
-			while(j > 0 && comparatorObj.compare(arrayToSort.get(j - 1), index) > 0){
+			while(j > 0 && comparatorObj.compare(arrayToSort.get(j - 1), index) > 0){ //>=
 				arrayToSort.set(j, arrayToSort.get(j - 1));
+				arrayToSort.set(j-1, index); //added this line 
 				j--;
 			}
 			arrayToSort.set(j, index); // insert value of index into index j
@@ -187,6 +188,7 @@ public class SortUtil {
 	 */
 	public static <T> void quicksort(ArrayList<T> arrayToSort, Comparator<? super T> comp) {
 		int sizeOfArray = arrayToSort.size()-1;
+		setThreshold(10);
 		quickSortRecursive(arrayToSort, 0, sizeOfArray, comp);
 	}
 	
@@ -199,17 +201,47 @@ public class SortUtil {
 	 * @param comp - generic comparator to compare the elements
 	 */
 	public static <T> void quickSortRecursive(ArrayList<T> arrayToSort, int left, int right, Comparator<? super T> comp){  
-		if(right - left <= 0){
+		int size = right-left+1;
+		int threshold = getThreshold();
+		if(left + threshold > right){
+			insertionSort(arrayToSort, left, right, comp);
 			return; // End. Everything is sorted.
 		}
 		else{
-			T pivot = pivotValue(arrayToSort, getPivotStyle(), comp); // the value of the very end element to compare with, consider hard-coding this value and changing for exerimentation
 			
+			T thePivot = pivotValue(arrayToSort, getPivotStyle(), comp); // the value of the very end element to compare with, consider hard-coding this value and changing for exerimentation
+			//System.out.println(pivot);
+			int location = arrayToSort.indexOf(thePivot);
+			swapValues(arrayToSort, location, size-1);
 			
-			int pivotLocation = partitionArrays(arrayToSort, left, right, pivot, comp);
+			//T pivot = arrayToSort.get(right); //consider making the index of
+			//int pivotLocation = partitionArrays(arrayToSort, left, right, pivot, comp);
+			int leftSide; //= left;
+			int rightSide; //= right-1;
 			
-			quickSortRecursive(arrayToSort, left, pivotLocation-1,  comp);
-			quickSortRecursive(arrayToSort, pivotLocation+1, right, comp);
+			//System.out.println(location);
+			
+			for(leftSide = left, rightSide = right -1;;) { //while(true)
+				//System.out.println(leftSide);
+				//System.out.println(pivot);
+				//System.out.println(arrayToSort.get(arrayToSort.indexOf(pivot)));
+				
+				while(leftSide < right-1 && comp.compare(arrayToSort.get(++leftSide), thePivot) < 0) {;}
+				
+				while(rightSide > left && comp.compare(thePivot, arrayToSort.get(--rightSide)) < 0){;}
+				
+				if(leftSide >= rightSide){
+					break;
+				}
+				//else
+				//{
+					swapValues(arrayToSort, leftSide, rightSide-1);
+				//}
+			//}
+			}
+			swapValues(arrayToSort, leftSide, right-1); //right-1
+			quickSortRecursive(arrayToSort, left, leftSide-1,  comp);
+			quickSortRecursive(arrayToSort, leftSide+1, right, comp);
 		}
 	}
 
@@ -217,26 +249,11 @@ public class SortUtil {
 	 * This takes in a pivot point and partitions array with that value.
 	 * @param pivot
 	 */
-	public static <T> int partitionArrays(ArrayList<T> arrayToSort, int left, int right, T pivot, Comparator<? super T> comp) {
-		int leftSide = left - 1;
-		int rightSide = right;
-		
-		while(true){
-			while(comp.compare(arrayToSort.get(++leftSide), arrayToSort.get(arrayToSort.indexOf(pivot))) < 0);
-			
-			while(rightSide > 0 && comp.compare(arrayToSort.get(--rightSide), arrayToSort.get(arrayToSort.indexOf(pivot))) > 0);
-			
-			if(leftSide >= rightSide){
-				break;
-			}
-			else
-			{
-				swapValues(arrayToSort, leftSide, rightSide);
-			}
-		}
-	swapValues(arrayToSort, leftSide, right);
-	return leftSide;
-}
+//	public static <T> int partitionArrays(ArrayList<T> arrayToSort, int left, int right, T pivot, Comparator<? super T> comp) {
+//		
+//	
+//	return leftSide;
+//}
 	
 	/**
 	 * Will swap 2 values with each other
@@ -245,6 +262,7 @@ public class SortUtil {
 	 */
 	public static <T> void swapValues(ArrayList<T> arrayToSort, int index1, int index2){
 		T tempArraySwap2 = arrayToSort.get(index1);// replace element of arrayToSort index1, with element of arrayToSort index2.
+		//System.out.println(index1 + " " + index2);
 		arrayToSort.set(index1, arrayToSort.get(index2));
 		arrayToSort.set(index2, tempArraySwap2);
 	}
@@ -305,7 +323,7 @@ public class SortUtil {
 			ArrayList<T> teenyList = new ArrayList<T>();
 			teenyList.add(array.get(0));
 			teenyList.add(array.get(array.size()/2));
-			teenyList.add(array.get(array.size()));
+			teenyList.add(array.get(array.size()-1));
 			SortUtil.insertionSort(teenyList, 0, teenyList.size()-1, comp);
 			return teenyList.get(1); //the middle value of the sorted list of components used to calculate pivot value
 		}
@@ -314,9 +332,9 @@ public class SortUtil {
 			Random rand = new Random();
 			
 			ArrayList<T> teenyList = new ArrayList<T>();
-			teenyList.add(array.get(rand.nextInt(array.size())));
-			teenyList.add(array.get(rand.nextInt(array.size())));
-			teenyList.add(array.get(rand.nextInt(array.size())));
+			teenyList.add(array.get(rand.nextInt(array.size()-1)));
+			teenyList.add(array.get(rand.nextInt(array.size()-1)));
+			teenyList.add(array.get(rand.nextInt(array.size()-1)));
 			SortUtil.insertionSort(teenyList, 0, teenyList.size()-1, comp);
 			return teenyList.get(1); //the middle value of the sorted list of components used to calculate pivot value
 		}

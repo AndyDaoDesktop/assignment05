@@ -5,6 +5,8 @@ import java.util.Random;
 
 import javax.sound.sampled.ReverbType;
 
+import assignment05.SortUtil;
+
 public class SortUtilTiming {
 	
 	private static Random rand = new Random();
@@ -13,19 +15,20 @@ public class SortUtilTiming {
 	private static ArrayList<ArrayList<Integer>> masterReverseSet = new ArrayList<ArrayList<Integer>>();
 	private static ArrayList<ArrayList<Integer>> masterRandomSet = new ArrayList<ArrayList<Integer>>();
 	
-	@SuppressWarnings("unchecked")
+	
 	public static void main(String[] args) {
 		long startTime, midTime, stopTime;
+		long startTimeQ, midTimeQ, stopTimeQ, startTimeM, midTimeM, stopTimeM;
 		
 		
 		int problemSize;
 		
-		for(int pivot = 0; pivot < 3; pivot++) {		//thresh when doing merge test
-			for (problemSize = 100; problemSize <= 1000; problemSize += 100)		//problem size loop	//problemSize = (int) Math.pow(2.0, 12.0); problemSize <= Math.pow(2.0, 22.0); problemSize *= 2
+		//for(int pivot = 0; pivot < 3; pivot++) {		//thresh when doing merge test
+			for (problemSize = 1000; problemSize <= 11000; problemSize += 1000)		//problemSize = (int) Math.pow(2.0, 12.0); problemSize <= Math.pow(2.0, 22.0); problemSize *= 2
 			{
 				//master lists
-				//masterSortedSet.add(SortUtil.generateBestCase(problemSize));		//will add a new list of the desired form at each iteration of the problem size loop
-				//masterReverseSet.add(SortUtil.generateWorstCase(problemSize));		//the last most contained list is the current problem size list
+				masterSortedSet.add(SortUtil.generateBestCase(problemSize));		//will add a new list of the desired form at each iteration of the problem size loop
+				masterReverseSet.add(SortUtil.generateWorstCase(problemSize));		//the last most contained list is the current problem size list
 				masterRandomSet.add(SortUtil.generateAverageCase(problemSize));
 
 
@@ -43,18 +46,17 @@ public class SortUtilTiming {
 					}
 
 					// Now, run the test.
-					long timesToLoop = 10;
+					long timesToLoop = 50;
 
-//					ArrayList<Integer> listS1 = new ArrayList<Integer>();
-//					ArrayList<Integer> listD1 = new ArrayList<Integer>();
+					ArrayList<Integer> listS1 = new ArrayList<Integer>();
+					ArrayList<Integer> listD1 = new ArrayList<Integer>();
 					ArrayList<Integer> listR1 = new ArrayList<Integer>();
 
 
-
-
-//					listS1 = masterSortedSet.get(masterSortedSet.size()-1);	//the last most item in the list set
-//					listD1 = masterReverseSet.get(masterSortedSet.size()-1);
+					listS1 = masterSortedSet.get(masterSortedSet.size()-1);	//the last most item in the list set
+					listD1 = masterReverseSet.get(masterSortedSet.size()-1);
 					listR1 = masterRandomSet.get(masterRandomSet.size()-1);
+					
 
 					//threshold selection for merge timing
 //					if(thresh == 0)
@@ -68,42 +70,60 @@ public class SortUtilTiming {
 //					else if(thresh == 4)
 //						SortUtil.setThreshold(listR1.size()/10); // Fifth threshold
 					
-					SortUtil.setPivot(0);
+					SortUtil.setPivot(0);	//best found pivot strategy
+					SortUtil.setThreshold(problemSize/6);	//best found threshold value
 					
 					SortUtilComparator<Integer> comp = new SortUtilComparator<Integer>();
-
-					startTime = System.nanoTime();
+					
+					startTimeQ = System.nanoTime();
 
 					//type of list selected to be sorted dictates what type of mergesort we are doing
 					for(int j = 0; j < timesToLoop; j++)	//the actions we are timing/interested
 					{
-						ArrayList<Integer> temp = listR1;
+						ArrayList<Integer> tempQ = new ArrayList<Integer>(listS1);
 						//SortUtil.mergesort(temp, comp);
-						SortUtil.quicksort(temp, comp);
+						SortUtil.quicksort(tempQ, comp);
 					}
 
-					midTime = System.nanoTime();
+					midTimeQ = System.nanoTime();
 
 					for(int g = 0; g < timesToLoop; g++) {
-						ArrayList<Integer> temp = listR1;
+						ArrayList<Integer> temp = new ArrayList<Integer>(listS1);
 					}
 
-					stopTime = System.nanoTime();
+					stopTimeQ = System.nanoTime();
+					
+					while(System.nanoTime() - stopTimeQ < 1000000000) {}
+					
+					startTimeM = System.nanoTime();
+					
+					for(int d = 0; d < timesToLoop; d++) {
+						ArrayList<Integer> tempM = new ArrayList<Integer>(listS1);
+						SortUtil.mergesort(tempM, comp);
+					}
+					
+					midTimeM = System.nanoTime();
+					
+					for(int y = 0; y < timesToLoop; y++) {
+						ArrayList<Integer> tempM = new ArrayList<Integer>(listS1);
+					}
+					
+					stopTimeM = System.nanoTime();
 
 					// Compute the time, subtract the cost of running the loop
 					// from the cost of running the loop and computing square roots.
 					// Average it over the number of runs.
-					double averageTime = ((midTime - startTime) - (stopTime - midTime)) / timesToLoop;
-
-					System.out.println(problemSize + "\t" + averageTime + "\t" + averageTime/(problemSize * (Math.log(problemSize)/Math.log(2.0))) + "\t" + averageTime/problemSize + "\t" + averageTime/Math.pow(problemSize, 2) + "\t" + averageTime/(Math.log(problemSize)/Math.log(2)));	//prints out results, get threshold shows what value we had for our switching point
-					//System.out.println(averageTime + "\t" + averageTime/p + "\t" + averageTime/Math.pow(p, 2) + "\t" + averageTime/(p*(Math.log(p)/Math.log(2))) + "\t" + averageTime/(Math.log(p)/Math.log(2)));
+					double averageQuickTime = (midTimeQ - startTimeQ) - (stopTimeQ - midTimeQ) / timesToLoop;
+					double averageMergeTime = (midTimeM - startTimeM) - (stopTimeM - midTimeM) / timesToLoop;
+					//System.out.println(problemSize + "\t" + averageTime + "\t" + averageTime/(problemSize * (Math.log(problemSize)/Math.log(2.0))) + "\t" + averageTime/problemSize + "\t" + averageTime/Math.pow(problemSize, 2) + "\t" + averageTime/(Math.log(problemSize)/Math.log(2)));	//prints out results, get threshold shows what value we had for our switching point
+					System.out.println(problemSize + "\t" + averageQuickTime + "\t" + averageMergeTime);
 
 				}
 				//not sure if necessary
 				//masterSet.clear();
 			}
 			//System.out.println("-----------End of Threshold--------------");
-			System.out.println("-----------End of Pivotsize" + pivot + " Test--------------");
-		}
+			//System.out.println("-----------End of Pivotsize" + "\t" + pivot + "\t" + " Test--------------");
+		//}
 	}
 }

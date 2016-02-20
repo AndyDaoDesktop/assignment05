@@ -19,11 +19,13 @@ public class SortUtilTests {
 	SortUtilComparator<String> compString; // Comparator obj for Strings
 	
 	ArrayList<Integer> integerArrayListToSort; // Integer ArrayList to sort
-	ArrayList<Character> charArrayListToSort; // Character ArrayList to sort 
+	ArrayList<Character> charArrayListToSort; // Character ArrayList to sort
+	ArrayList<Character> shortCharArrayListToSort;
 	ArrayList<String> stringArrayListToSort; // String ArrayList to sort
 	
 	ArrayList<Integer> expectedValuesArrayList; // The expected Integer ArrayList 
 	ArrayList<Character> expectedCharArrayList; // The expected Character ArrayList
+	ArrayList<Character> expectedShortCharArrayList;
 	
 	Integer[] expectedBestCaseArray; // Will be used to check Best Case ordering (ascending order)
 	ArrayList<Integer> expectedBestCaseList; 
@@ -102,6 +104,17 @@ public class SortUtilTests {
 		expectedCharArrayList.add('D');
 		expectedCharArrayList.add('E');
 		
+// Add char calues to the shorter list in non-sorted order
+		shortCharArrayListToSort = new ArrayList<Character>();
+		shortCharArrayListToSort.add('B');
+		shortCharArrayListToSort.add('C');
+		shortCharArrayListToSort.add('A');
+		//expected order
+		expectedShortCharArrayList = new ArrayList<Character>();
+		expectedShortCharArrayList.add('A');
+		expectedShortCharArrayList.add('B');
+		expectedShortCharArrayList.add('C');
+		
 // Sort this String ArrayList
 		stringArrayListToSort = new ArrayList<String>();
 		stringArrayListToSort.add("DEF");
@@ -146,8 +159,18 @@ public class SortUtilTests {
 	
 	@Test
 	public void quickSort_WithCharacterArray() {
+		//System.out.println(charArrayListToSort);
 		SortUtil.quicksort(charArrayListToSort, compCharacter);
+		//System.out.println(charArrayListToSort);
 		Assert.assertEquals(expectedCharArrayList, charArrayListToSort);
+	}
+	
+	@Test
+	public void quickSort_SmallCharArray() {
+		System.out.println(shortCharArrayListToSort);
+		SortUtil.quicksort(shortCharArrayListToSort, compCharacter);
+		System.out.println(shortCharArrayListToSort);
+		Assert.assertEquals(expectedShortCharArrayList, shortCharArrayListToSort);
 	}
 	
 	@Test
